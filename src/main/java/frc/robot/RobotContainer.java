@@ -25,6 +25,9 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
+
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -37,6 +40,9 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+
+  //Pigeon Gyro
+  public static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(0);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -56,6 +62,7 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-m_driverController.getRightX(), 0.06),
                 true),
             m_robotDrive));
+   
   }
 
   /**
