@@ -42,7 +42,7 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
   //Pigeon Gyro
-  public static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(0);
+  public static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(3);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
