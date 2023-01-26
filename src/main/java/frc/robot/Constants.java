@@ -28,8 +28,8 @@ public final class Constants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     public static final boolean driveRightJoystick = true;
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = .5;
-    public static final double kMaxAngularSpeed = Math.PI / 2; // radians per second
+    public static final double kMaxSpeedMetersPerSecond = 1;
+    public static final double kMaxAngularSpeed = Math.PI * 2; // radians per second
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26.5);
@@ -103,7 +103,7 @@ public final class Constants {
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    public static final double kTurningP = 0.5;
+    public static final double kTurningP = 0.1;
     public static final double kTurningI = 0;
     public static final double kTurningD = 0;
     public static final double kTurningFF = 0;
