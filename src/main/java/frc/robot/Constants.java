@@ -27,6 +27,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     public static final boolean driveRightJoystick = false;
+    public static final boolean fieldRelative = false;
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 2;
     public static final double kMaxAngularSpeed = Math.PI * 3; // radians per second
