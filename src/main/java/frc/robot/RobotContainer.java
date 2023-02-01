@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,15 +12,15 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.Joystick;
+//import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.XboxController.Button;
+//import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
@@ -36,14 +35,16 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
  */
 public class RobotContainer {
         // The robot's subsystems
-        private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-        private final RotatingArm m_robotArm = new RotatingArm();
-
+        public final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(3);
         // The driver's controller
-        XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+        public final static XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
-        // Pigeon Gyro
-        public static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(3);
+        
+        public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
+        public final static RotatingArm m_robotArm = new RotatingArm();
+
+
+
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -54,39 +55,9 @@ public class RobotContainer {
 
                 // Configure default commands
                 if (Constants.DriveConstants.driveRightJoystick) {
-                        m_robotDrive.setDefaultCommand(
-                                        // The Right stick controls translation of the robot.
-                                        // Turning is controlled by the X axis of the left stick.
-                                        new RunCommand(
-                                                        () -> m_robotDrive.drive(
-                                                                        MathUtil.applyDeadband(
-                                                                                        -m_driverController.getRightY(),
-                                                                                        0.1),
-                                                                        MathUtil.applyDeadband(
-                                                                                        -m_driverController.getRightX(),
-                                                                                        0.1),
-                                                                        MathUtil.applyDeadband(
-                                                                                        -m_driverController.getLeftX(),
-                                                                                        0.1),
-                                                                        Constants.DriveConstants.fieldRelative),
-                                                        m_robotDrive));
+                        m_robotDrive.setDefaultCommand(m_robotDrive.driveRightJoystick());
                 } else {
-                        m_robotDrive.setDefaultCommand(
-                                        // The left stick controls translation of the robot.
-                                        // Turning is controlled by the X axis of the right stick.
-                                        new RunCommand(
-                                                        () -> m_robotDrive.drive(
-                                                                        MathUtil.applyDeadband(
-                                                                                        -m_driverController.getLeftY(),
-                                                                                        0.1),
-                                                                        MathUtil.applyDeadband(
-                                                                                        -m_driverController.getLeftX(),
-                                                                                        0.1),
-                                                                        MathUtil.applyDeadband(
-                                                                                        -m_driverController.getRightX(),
-                                                                                        0.1),
-                                                                        Constants.DriveConstants.fieldRelative),
-                                                        m_robotDrive));
+                        m_robotDrive.setDefaultCommand(m_robotDrive.driveLeftJoystick());
                 }
 
         }
@@ -101,18 +72,21 @@ public class RobotContainer {
          * {@link JoystickButton}.
          */
         private void configureButtonBindings() {
-                new JoystickButton(m_driverController, Button.kR1.value)
-                                .whileTrue(new RunCommand(
-                                                () -> m_robotDrive.setX(),
-                                                m_robotDrive));
-                // Rotate Arm Down
-                new JoystickButton(m_driverController, Button.kL1.value)
-                                .whileTrue(new RunCommand(() -> m_robotArm.rotate(false), m_robotArm));
-                // Rotate Arm Up
-                new JoystickButton(m_driverController, Button.kL2.value)
-                                .whileTrue(new RunCommand(
-                                                () -> m_robotArm.rotate(true),
-                                                m_robotArm));
+                new JoystickButton(m_driverController, Button.kRightBumper.value)
+                                .whileTrue(m_robotDrive.setXCommand());
+
+                // Rotate arm up
+                new JoystickButton(m_driverController, Button.kY.value)
+                                .whileTrue(m_robotArm.rotateCommand(Constants.RoatingArmConstants.liftMaxSpeed));
+
+                // Rotate arm down
+                new JoystickButton(m_driverController, Button.kA.value)
+                                .whileTrue(m_robotArm.rotateCommand(Constants.RoatingArmConstants.liftMaxSpeed * -1));
+
+                // Set arm to Pi/2 position
+                new JoystickButton(m_driverController, Button.kLeftBumper.value)
+                                .onTrue(m_robotArm.positionOneCommand());
+
         }
 
         /**

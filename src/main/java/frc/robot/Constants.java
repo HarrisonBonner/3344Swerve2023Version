@@ -28,6 +28,7 @@ public final class Constants {
   public static final class RoatingArmConstants{
     public static final int rightRotationMotor = 18;
     public static final int leftRotationMotor = 19;
+    public static final double liftMaxSpeed = 1;
   }
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of

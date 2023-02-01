@@ -15,6 +15,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.math.MathUtil;
+import frc.robot.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -38,8 +41,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
-  // The gyro sensor
-  // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -123,6 +125,41 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
 
+
+  public CommandBase driveLeftJoystick(){
+    return this.run(() -> this.drive(
+      MathUtil.applyDeadband(
+                      -RobotContainer.m_driverController.getLeftY(),
+                      0.1),
+      MathUtil.applyDeadband(
+                      -RobotContainer.m_driverController.getLeftX(),
+                      0.1),
+      MathUtil.applyDeadband(
+                      -RobotContainer.m_driverController.getRightX(),
+                      0.1),
+      Constants.DriveConstants.fieldRelative));
+  }
+
+  public CommandBase driveRightJoystick(){
+    return this.run(() -> this.drive(
+      MathUtil.applyDeadband(
+                      -RobotContainer.m_driverController.getRightY(),
+                      0.1),
+      MathUtil.applyDeadband(
+                      -RobotContainer.m_driverController.getRightX(),
+                      0.1),
+      MathUtil.applyDeadband(
+                      -RobotContainer.m_driverController.getLeftX(),
+                      0.1),
+      Constants.DriveConstants.fieldRelative));
+  }
+
+
+
+
+
+
+
   /**
    * Sets the wheels into an X formation to prevent movement.
    */
@@ -131,6 +168,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+  }
+
+  public CommandBase setXCommand() {
+    return this.run(this::setX);
   }
 
   /**
