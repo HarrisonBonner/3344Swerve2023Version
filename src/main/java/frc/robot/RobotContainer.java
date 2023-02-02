@@ -74,22 +74,28 @@ public class RobotContainer {
                                 .whileTrue(m_robotDrive.setXCommand());
 
                 // Rotate arm up
-                new JoystickButton(m_driverController, Button.kY.value)
+                new JoystickButton(m_gunnerController, Button.kRightBumper.value)
                                 .whileTrue(m_robotArm.rotateCommand(Constants.RoatingArmConstants.liftMaxSpeed));
 
                 // Rotate arm down
-                new JoystickButton(m_driverController, Button.kX.value)
+                new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
                                 .whileTrue(m_robotArm.rotateCommand(Constants.RoatingArmConstants.liftMaxSpeed * -1));
 
                 // Set arm to Pi/2 position
-                new JoystickButton(m_driverController, Button.kLeftBumper.value)
-                                .onTrue(m_robotArm.positionOneCommand());
-                //Intake on claw
-                new JoystickButton(m_driverController, Button.kB.value)
+                //new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
+                //                .onTrue(m_robotArm.rotationPositionOneCommand());
+                // Intake on claw
+                new JoystickButton(m_gunnerController, Button.kB.value)
                                 .whileTrue(m_robotClaw.outake());
-                //Outake on claw
-                new JoystickButton(m_driverController, Button.kA.value)
+                // Outake on claw
+                new JoystickButton(m_gunnerController, Button.kA.value)
                                 .whileTrue(m_robotClaw.intake());
+                //Extend the arm
+                new JoystickButton(m_gunnerController, Button.kY.value)
+                                .whileTrue(m_robotArm.extendArmCommand());
+                //Retract the arm
+                new JoystickButton(m_gunnerController, Button.kX.value)
+                                .whileTrue(m_robotArm.retractArmCommand());
         }
 
         /**

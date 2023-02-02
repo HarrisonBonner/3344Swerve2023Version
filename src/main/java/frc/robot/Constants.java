@@ -26,13 +26,15 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public static final class ClawConstants{
-    public static final int clawMotorCanID = 20;
+    public static final int clawMotorCanID = 21;
     public static final double clawMaxSpeed = .25;
   }
   public static final class RoatingArmConstants{
     public static final int rightRotationMotorCanID = 18;
     public static final int leftRotationMotorCanID = 19;
+    public static final int extensionMotorCanId = 20;
     public static final double liftMaxSpeed = 1;
+    public static final double extensionMaxSpeed = 0.5;
   }
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
