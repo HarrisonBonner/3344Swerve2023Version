@@ -15,9 +15,9 @@ import frc.robot.Constants;
 
 public class RotatingArm extends SubsystemBase {
 
-    private final CANSparkMax m_RightLift = new CANSparkMax(Constants.RoatingArmConstants.rightRotationMotor,
+    private final CANSparkMax m_RightLift = new CANSparkMax(Constants.RoatingArmConstants.rightRotationMotorCanID,
             MotorType.kBrushless);
-    private final CANSparkMax m_LeftLift = new CANSparkMax(Constants.RoatingArmConstants.leftRotationMotor,
+    private final CANSparkMax m_LeftLift = new CANSparkMax(Constants.RoatingArmConstants.leftRotationMotorCanID,
             MotorType.kBrushless);
 
     private final SparkMaxPIDController m_RightLiftPIDController = m_RightLift.getPIDController();
@@ -28,7 +28,6 @@ public class RotatingArm extends SubsystemBase {
     public RotatingArm() {
         m_RightLift.restoreFactoryDefaults();
         m_LeftLift.restoreFactoryDefaults();
-        m_LeftLift.setInverted(true);
 
         m_RightLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
         m_LeftLift.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -47,6 +46,8 @@ public class RotatingArm extends SubsystemBase {
         m_LeftLiftPIDController.setD(0);
         m_LeftLiftPIDController.setFF(0);
         m_LeftLiftPIDController.setOutputRange(0,Math.PI);  
+
+        //m_LeftLift.follow(m_RightLift, true); Possible solution to simply have the left mirror the right and cut down calculations
 
         m_RightLift.burnFlash();
         m_LeftLift.burnFlash();

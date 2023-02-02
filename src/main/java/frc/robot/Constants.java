@@ -25,9 +25,13 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
+  public static final class ClawConstants{
+    public static final int clawMotorCanID = 20;
+    public static final double clawMaxSpeed = .25;
+  }
   public static final class RoatingArmConstants{
-    public static final int rightRotationMotor = 18;
-    public static final int leftRotationMotor = 19;
+    public static final int rightRotationMotorCanID = 18;
+    public static final int leftRotationMotorCanID = 19;
     public static final double liftMaxSpeed = 1;
   }
   public static final class DriveConstants {
@@ -126,6 +130,8 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kGunnerControllerPort = 0;
+
   }
 
   public static final class AutoConstants {

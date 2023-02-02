@@ -38,13 +38,11 @@ public class RobotContainer {
         public final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(3);
         // The driver's controller
         public final static XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+        public final static XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
 
-        
         public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
         public final static RotatingArm m_robotArm = new RotatingArm();
-
-
-
+        public final static Claw m_robotClaw = new Claw();
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -80,13 +78,18 @@ public class RobotContainer {
                                 .whileTrue(m_robotArm.rotateCommand(Constants.RoatingArmConstants.liftMaxSpeed));
 
                 // Rotate arm down
-                new JoystickButton(m_driverController, Button.kA.value)
+                new JoystickButton(m_driverController, Button.kX.value)
                                 .whileTrue(m_robotArm.rotateCommand(Constants.RoatingArmConstants.liftMaxSpeed * -1));
 
                 // Set arm to Pi/2 position
                 new JoystickButton(m_driverController, Button.kLeftBumper.value)
                                 .onTrue(m_robotArm.positionOneCommand());
-
+                //Intake on claw
+                new JoystickButton(m_driverController, Button.kB.value)
+                                .whileTrue(m_robotClaw.outake());
+                //Outake on claw
+                new JoystickButton(m_driverController, Button.kA.value)
+                                .whileTrue(m_robotClaw.intake());
         }
 
         /**
