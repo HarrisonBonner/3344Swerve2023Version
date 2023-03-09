@@ -42,7 +42,7 @@ public class RobotContainer {
 
         public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
         public final static RotatingArm m_robotArm = new RotatingArm();
-        public final static Claw m_robotClaw = new Claw();
+        public final static Intake m_robotClaw = new Intake();
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -75,27 +75,19 @@ public class RobotContainer {
 
                 // Rotate arm up
                 new JoystickButton(m_gunnerController, Button.kRightBumper.value)
-                                .whileTrue(m_robotArm.rotateCommand(Constants.RoatingArmConstants.liftMaxSpeed));
+                                .whileTrue(m_robotArm.rotateCommand(Constants.RotatingArmConstants.liftMaxSpeed));
 
                 // Rotate arm down
                 new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
-                                .whileTrue(m_robotArm.rotateCommand(Constants.RoatingArmConstants.liftMaxSpeed * -1));
+                                .whileTrue(m_robotArm.rotateCommand(Constants.RotatingArmConstants.liftMaxSpeed * -1));
 
-                // Set arm to Pi/2 position
-                //new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
-                //                .onTrue(m_robotArm.rotationPositionOneCommand());
                 // Intake on claw
                 new JoystickButton(m_gunnerController, Button.kB.value)
                                 .whileTrue(m_robotClaw.outake());
                 // Outake on claw
                 new JoystickButton(m_gunnerController, Button.kA.value)
                                 .whileTrue(m_robotClaw.intake());
-                //Extend the arm
-                new JoystickButton(m_gunnerController, Button.kY.value)
-                                .whileTrue(m_robotArm.extendArmCommand());
-                //Retract the arm
-                new JoystickButton(m_gunnerController, Button.kX.value)
-                                .whileTrue(m_robotArm.retractArmCommand());
+  
         }
 
         /**

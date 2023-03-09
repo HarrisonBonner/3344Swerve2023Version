@@ -13,19 +13,19 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import frc.robot.Constants;
 
-public class Claw extends SubsystemBase{
+public class Intake extends SubsystemBase{
 
-    private final CANSparkMax m_clawMotor = new CANSparkMax(Constants.ClawConstants.clawMotorCanID,MotorType.kBrushless);
+    private final CANSparkMax m_Intake = new CANSparkMax(Constants.IntakeConstants.intakeMotorCanID,MotorType.kBrushless);
 
-    public Claw(){
-        m_clawMotor.setIdleMode(IdleMode.kBrake);
+    public Intake(){
+        m_Intake.setIdleMode(IdleMode.kBrake);
     }
 
     public CommandBase intake(){
-        return this.startEnd(() -> m_clawMotor.set(-.5), () -> m_clawMotor.stopMotor());
+        return this.startEnd(() -> m_Intake.set(-.5), () -> m_Intake.stopMotor());
     }
 
     public CommandBase outake(){
-        return this.startEnd(() -> m_clawMotor.set(.5), () -> m_clawMotor.stopMotor());
+        return this.startEnd(() -> m_Intake.set(.5), () -> m_Intake.stopMotor());
     }
 }
