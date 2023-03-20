@@ -52,12 +52,12 @@ public class RotatingArm extends SubsystemBase {
     public CommandBase rotateLiftCommand(double speed) {
 
         //return this.startEnd(() -> m_Lift.set(speed), () -> m_LiftPID.setReference(m_LiftEncoder.getPosition(), ControlType.kPosition));
-        return this.startEnd(() ->  m_Lift.set(speed), () -> m_Lift.set(.05));
+        return this.startEnd(() ->  m_Lift.set(speed), () -> m_Lift.set(Constants.RotatingArmConstants.liftHoldSpeed));
 
     }
 
     public CommandBase rotateWristCommand(double speed){
-        return this.startEnd(() -> m_Wrist.set(speed), () -> m_Wrist.stopMotor());
+        return this.startEnd(() -> m_Wrist.set(speed), () -> m_Wrist.set(Constants.RotatingArmConstants.wristHoldSpeed));
     }
 
     public void setArmPosition(double armAngle, double wristAngle){

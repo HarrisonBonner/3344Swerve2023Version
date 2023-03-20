@@ -36,7 +36,7 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
  */
 public class RobotContainer {
         // The robot's subsystems
-        public final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(3);
+        public final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(0);
         // The driver's controller
         // public final static XboxController m_driverController = new
         // XboxController(OIConstants.kDriverControllerPort);
@@ -74,29 +74,29 @@ public class RobotContainer {
          * {@link JoystickButton}.
          */
         private void configureButtonBindings() {
-                new JoystickButton(m_driverController, 0)
+                new JoystickButton(m_driverController, 9)
                                 .whileTrue(m_robotDrive.setXCommand());
 
                 // Rotate arm up
-                new JoystickButton(m_driverController, 1)
+                new JoystickButton(m_driverController, 4)
                                 .whileTrue(m_robotArm.rotateLiftCommand(Constants.RotatingArmConstants.liftMaxSpeed));
 
                 // Rotate arm down
-                new JoystickButton(m_driverController, 2)
+                new JoystickButton(m_driverController, 1)
                                 .whileTrue(m_robotArm
                                                 .rotateLiftCommand(Constants.RotatingArmConstants.liftMaxSpeed * -1));
                 // Rotate Wrist up
-                new JoystickButton(m_driverController, 0)
-                                .whileTrue(m_robotArm.rotateLiftCommand(Constants.RotatingArmConstants.wristMaxSpeed));
-                // Rotate Wrist down
-                new JoystickButton(m_driverController, 0)
-                                .whileTrue(m_robotArm
-                                                .rotateLiftCommand(-1 * Constants.RotatingArmConstants.wristMaxSpeed));
-                // Intake on claw
                 new JoystickButton(m_driverController, 3)
+                                .whileTrue(m_robotArm.rotateWristCommand(Constants.RotatingArmConstants.wristMaxSpeed));
+                // Rotate Wrist down
+                new JoystickButton(m_driverController, 2)
+                                .whileTrue(m_robotArm
+                                                .rotateWristCommand(-1 * Constants.RotatingArmConstants.wristMaxSpeed));
+                // Intake on claw
+                new JoystickButton(m_driverController, 5)
                                 .whileTrue(m_robotClaw.outake());
                 // Outake on claw
-                new JoystickButton(m_driverController, 4)
+                new JoystickButton(m_driverController, 6)
                                 .whileTrue(m_robotClaw.intake());
 
         }
