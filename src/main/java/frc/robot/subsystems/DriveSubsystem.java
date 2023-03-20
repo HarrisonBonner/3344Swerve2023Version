@@ -129,13 +129,13 @@ public class DriveSubsystem extends SubsystemBase {
   public CommandBase driveLeftJoystick(){
     return this.run(() -> this.drive(
       MathUtil.applyDeadband(
-                      -RobotContainer.m_driverController.getLeftY(),
+                      -RobotContainer.m_driverController.getRawAxis(0),
                       0.1),
       MathUtil.applyDeadband(
-                      -RobotContainer.m_driverController.getLeftX(),
+                      -RobotContainer.m_driverController.getRawAxis(0),
                       0.1),
       MathUtil.applyDeadband(
-                      -RobotContainer.m_driverController.getRightX(),
+                      -RobotContainer.m_driverController.getRawAxis(0),
                       0.1),
       Constants.DriveConstants.fieldRelative));
   }
@@ -143,13 +143,13 @@ public class DriveSubsystem extends SubsystemBase {
   public CommandBase driveRightJoystick(){
     return this.run(() -> this.drive(
       MathUtil.applyDeadband(
-                      -RobotContainer.m_driverController.getRightY(),
+                      -RobotContainer.m_driverController.getRawAxis(0),
                       0.1),
       MathUtil.applyDeadband(
-                      -RobotContainer.m_driverController.getRightX(),
+                      -RobotContainer.m_driverController.getRawAxis(0),
                       0.1),
       MathUtil.applyDeadband(
-                      -RobotContainer.m_driverController.getLeftX(),
+                      -RobotContainer.m_driverController.getRawAxis(0),
                       0.1),
       Constants.DriveConstants.fieldRelative));
   }
@@ -218,4 +218,6 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return RobotContainer.m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
+
+
 }

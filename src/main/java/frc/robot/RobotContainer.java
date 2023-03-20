@@ -12,13 +12,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.Joystick;
 //import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
+//import edu.wpi.first.wpilibj.XboxController;
+//import edu.wpi.first.wpilibj.XboxController.Button;
 //import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
+//import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -37,9 +38,12 @@ public class RobotContainer {
         // The robot's subsystems
         public final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(3);
         // The driver's controller
-        public final static XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-        public final static XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
-
+        // public final static XboxController m_driverController = new
+        // XboxController(OIConstants.kDriverControllerPort);
+        // public final static XboxController m_gunnerController = new
+        // XboxController(OIConstants.kGunnerControllerPort);
+        public final static Joystick m_driverController = new Joystick(0);
+        public final static Joystick m_gunnerController = new Joystick(1);
         public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
         public final static RotatingArm m_robotArm = new RotatingArm();
         public final static Intake m_robotClaw = new Intake();
@@ -70,24 +74,31 @@ public class RobotContainer {
          * {@link JoystickButton}.
          */
         private void configureButtonBindings() {
-                new JoystickButton(m_driverController, Button.kRightBumper.value)
+                new JoystickButton(m_driverController, 0)
                                 .whileTrue(m_robotDrive.setXCommand());
 
                 // Rotate arm up
-                new JoystickButton(m_gunnerController, Button.kRightBumper.value)
-                                .whileTrue(m_robotArm.rotateCommand(Constants.RotatingArmConstants.liftMaxSpeed));
+                new JoystickButton(m_driverController, 1)
+                                .whileTrue(m_robotArm.rotateLiftCommand(Constants.RotatingArmConstants.liftMaxSpeed));
 
                 // Rotate arm down
-                new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
-                                .whileTrue(m_robotArm.rotateCommand(Constants.RotatingArmConstants.liftMaxSpeed * -1));
-
+                new JoystickButton(m_driverController, 2)
+                                .whileTrue(m_robotArm
+                                                .rotateLiftCommand(Constants.RotatingArmConstants.liftMaxSpeed * -1));
+                // Rotate Wrist up
+                new JoystickButton(m_driverController, 0)
+                                .whileTrue(m_robotArm.rotateLiftCommand(Constants.RotatingArmConstants.wristMaxSpeed));
+                // Rotate Wrist down
+                new JoystickButton(m_driverController, 0)
+                                .whileTrue(m_robotArm
+                                                .rotateLiftCommand(-1 * Constants.RotatingArmConstants.wristMaxSpeed));
                 // Intake on claw
-                new JoystickButton(m_gunnerController, Button.kB.value)
+                new JoystickButton(m_driverController, 3)
                                 .whileTrue(m_robotClaw.outake());
                 // Outake on claw
-                new JoystickButton(m_gunnerController, Button.kA.value)
+                new JoystickButton(m_driverController, 4)
                                 .whileTrue(m_robotClaw.intake());
-  
+
         }
 
         /**
