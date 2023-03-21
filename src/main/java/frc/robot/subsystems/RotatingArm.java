@@ -24,7 +24,7 @@ public class RotatingArm extends SubsystemBase {
 
     public RotatingArm() {
 
-        m_Lift.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        m_Lift.setIdleMode(CANSparkMax.IdleMode.kCoast);
         m_LiftEncoder = m_Lift.getAbsoluteEncoder(Type.kDutyCycle);
         m_LiftPID = m_Lift.getPIDController();
         m_LiftPID.setFeedbackDevice(m_LiftEncoder);
@@ -33,7 +33,7 @@ public class RotatingArm extends SubsystemBase {
         m_LiftPID.setD(Constants.RotatingArmConstants.liftPID.Dval);
         m_Lift.burnFlash();
 
-        m_Wrist.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        m_Wrist.setIdleMode(CANSparkMax.IdleMode.kCoast);
         m_WristEncoder = m_Wrist.getAbsoluteEncoder(Type.kDutyCycle);
         m_WristPID = m_Wrist.getPIDController();
         m_WristPID.setFeedbackDevice(m_WristEncoder);
@@ -64,18 +64,18 @@ public class RotatingArm extends SubsystemBase {
         m_LiftPID.setReference(armAngle, CANSparkMax.ControlType.kPosition);
         m_WristPID.setReference(wristAngle, CANSparkMax.ControlType.kPosition);
     }
-
+    //TODO check wrist angles
     public CommandBase armTopGoal() {
-        return this.run( () -> setArmPosition(90, 0));
+        return this.run( () -> setArmPosition(289, 254));
     }
     public CommandBase armMidGoal() {
-        return this.run( () -> setArmPosition(45, 20));
+        return this.run( () -> setArmPosition(241, 214.5));
     }
     public CommandBase armLowGoal() {
-        return this.run( () -> setArmPosition(20, 40));
+        return this.run( () -> setArmPosition(180, 219));
     }
     public CommandBase armFloor() {
-        return this.run( () -> setArmPosition(10, 90));
+        return this.run( () -> setArmPosition(153, 230));
     }
 
 

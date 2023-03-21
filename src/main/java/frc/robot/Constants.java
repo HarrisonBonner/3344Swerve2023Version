@@ -42,13 +42,13 @@ public final class Constants {
 
 
     public static class liftPID {
-      public static final double Pval = 1;
+      public static final double Pval = .001;
       public static final double Ival = 0;
       public static final double Dval = 0;
     }
 
     public static class wristPID {
-      public static final double Pval = 1;
+      public static final double Pval = .001;
       public static final double Ival = 0;
       public static final double Dval = 0;
     }

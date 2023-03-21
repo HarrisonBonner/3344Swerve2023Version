@@ -24,6 +24,8 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+
 import java.util.List;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
@@ -74,30 +76,44 @@ public class RobotContainer {
          * {@link JoystickButton}.
          */
         private void configureButtonBindings() {
-                new JoystickButton(m_driverController, 9)
+                new JoystickButton(m_driverController, 1)
                                 .whileTrue(m_robotDrive.setXCommand());
 
                 // Rotate arm up
-                new JoystickButton(m_driverController, 4)
+                new JoystickButton(m_gunnerController, 4)
                                 .whileTrue(m_robotArm.rotateLiftCommand(Constants.RotatingArmConstants.liftMaxSpeed));
 
                 // Rotate arm down
-                new JoystickButton(m_driverController, 1)
+                new JoystickButton(m_gunnerController, 1)
                                 .whileTrue(m_robotArm
                                                 .rotateLiftCommand(Constants.RotatingArmConstants.liftMaxSpeed * -1));
                 // Rotate Wrist up
-                new JoystickButton(m_driverController, 3)
+                new JoystickButton(m_gunnerController, 3)
                                 .whileTrue(m_robotArm.rotateWristCommand(Constants.RotatingArmConstants.wristMaxSpeed));
                 // Rotate Wrist down
-                new JoystickButton(m_driverController, 2)
+                new JoystickButton(m_gunnerController, 2)
                                 .whileTrue(m_robotArm
-                                                .rotateWristCommand(-1 * Constants.RotatingArmConstants.wristMaxSpeed));
+                                                .rotateWristCommand(-Constants.RotatingArmConstants.wristMaxSpeed));
                 // Intake on claw
-                new JoystickButton(m_driverController, 5)
+                new JoystickButton(m_gunnerController, 5)
                                 .whileTrue(m_robotClaw.outake());
                 // Outake on claw
-                new JoystickButton(m_driverController, 6)
+                new JoystickButton(m_gunnerController, 6)
                                 .whileTrue(m_robotClaw.intake());
+                /*
+                 * top -> high goal
+                 * left -> mid goal
+                 * bottom -> low goal
+                 * right -> floor
+                 */
+                POVButton povUP = new POVButton(m_gunnerController, 0);
+                povUP.onTrue(m_robotArm.armTopGoal());
+                POVButton povLeft = new POVButton(m_gunnerController, 90);
+                povLeft.onTrue(m_robotArm.armMidGoal());
+                POVButton povDown = new POVButton(m_gunnerController, 180);
+                povDown.onTrue(m_robotArm.armLowGoal());
+                POVButton povRight = new POVButton(m_gunnerController, 270);
+                povRight.onTrue(m_robotArm.armFloor());
 
         }
 
