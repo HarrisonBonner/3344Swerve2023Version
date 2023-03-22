@@ -36,22 +36,22 @@ public final class Constants {
     public static final int wristMotorCanId = 19;
 
     public static final double liftMaxSpeed = .3;
-    public static final double liftHoldSpeed = .05;
+    public static final double liftHoldSpeed = .07;
     public static final double wristMaxSpeed = .3;
-    public static final double wristHoldSpeed = -.02;
+    public static final double wristHoldSpeed = -.025;
 
-    public static final boolean liftEncoderInverted = true;
-    public static final boolean wristEncoderInverted = true;
+    public static final boolean liftEncoderInverted = false;
+    public static final boolean wristEncoderInverted = false;
 
 
     public static class liftPID {
-      public static final double Pval = .001;
+      public static final double Pval = .0015;
       public static final double Ival = 0;
       public static final double Dval = 0;
     }
 
     public static class wristPID {
-      public static final double Pval = .001;
+      public static final double Pval = .002;
       public static final double Ival = 0;
       public static final double Dval = 0;
     }
@@ -94,6 +94,16 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 15;
 
     public static final boolean kGyroReversed = true; // TODO check with pigeon
+
+    public static class autoLevelPID{
+      public static final double kP = 0.05;
+      public static final double kI = 0;
+      public static final double kD = 0;
+      public static final double kFF = 0;
+      public static final double max = .5;
+      public static final double min = -.5;
+
+    }
   }
 
   public static final class ModuleConstants {

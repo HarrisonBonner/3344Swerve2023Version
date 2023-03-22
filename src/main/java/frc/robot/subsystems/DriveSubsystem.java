@@ -11,12 +11,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 //import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -218,13 +220,29 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return RobotContainer.m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
-
+  //TODO autolevel
   public void autoLevel(){
     // make pid
     // set goal
     // level
     // set x mode
 
+    PIDController leveler = new PIDController(Constants.DriveConstants.autoLevelPID.kP, Constants.DriveConstants.autoLevelPID.kI, Constants.DriveConstants.autoLevelPID.kD);
+    leveler.setSetpoint(0);
+    while(!leveler.atSetpoint()){
+      double correctionSpeed = leveler.calculate(RobotContainer.m_gyro.getAngle());
+      correctionSpeed = Math.max(correctionSpeed, Constants.DriveConstants.autoLevelPID.max);
+      correctionSpeed = Math.min(correctionSpeed, Constants.DriveConstants.autoLevelPID.min);
+      this.drive(0, correctionSpeed, 0, false);
+      Timer.delay(.005);
+    }
+    this.setX();
+    leveler.close();
+
+  }
+
+  public CommandBase autoLevelCommand(){
+    return this.run(this::autoLevel);
   }
 
 
