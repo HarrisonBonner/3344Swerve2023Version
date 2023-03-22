@@ -23,9 +23,10 @@ public class RotatingArm extends SubsystemBase {
     private SparkMaxPIDController m_WristPID;
 
     public RotatingArm() {
-
+        //Config controllers, encoder, and pid
         m_Lift.setIdleMode(CANSparkMax.IdleMode.kCoast);
         m_LiftEncoder = m_Lift.getAbsoluteEncoder(Type.kDutyCycle);
+        m_LiftEncoder.setInverted(Constants.RotatingArmConstants.liftEncoderInverted);
         m_LiftPID = m_Lift.getPIDController();
         m_LiftPID.setFeedbackDevice(m_LiftEncoder);
         m_LiftPID.setP(Constants.RotatingArmConstants.liftPID.Pval);
@@ -35,6 +36,7 @@ public class RotatingArm extends SubsystemBase {
 
         m_Wrist.setIdleMode(CANSparkMax.IdleMode.kCoast);
         m_WristEncoder = m_Wrist.getAbsoluteEncoder(Type.kDutyCycle);
+        m_LiftEncoder.setInverted(Constants.RotatingArmConstants.wristEncoderInverted);
         m_WristPID = m_Wrist.getPIDController();
         m_WristPID.setFeedbackDevice(m_WristEncoder);
         m_WristPID.setP(Constants.RotatingArmConstants.wristPID.Pval);
@@ -50,13 +52,15 @@ public class RotatingArm extends SubsystemBase {
 
 
     public CommandBase rotateLiftCommand(double speed) {
-
+        //TODO check hold idea
         //return this.startEnd(() -> m_Lift.set(speed), () -> m_LiftPID.setReference(m_LiftEncoder.getPosition(), ControlType.kPosition));
         return this.startEnd(() ->  m_Lift.set(speed), () -> m_Lift.set(Constants.RotatingArmConstants.liftHoldSpeed));
 
     }
 
     public CommandBase rotateWristCommand(double speed){
+        //TODO check hold idea
+        //return this.startEnd(() -> m_Wrist.set(speed), () -> m_WristPID.setReference(m_WristEncoder.getPosition(), ControlType.kPosition));
         return this.startEnd(() -> m_Wrist.set(speed), () -> m_Wrist.set(Constants.RotatingArmConstants.wristHoldSpeed));
     }
 

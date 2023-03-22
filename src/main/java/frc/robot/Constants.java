@@ -40,6 +40,9 @@ public final class Constants {
     public static final double wristMaxSpeed = .3;
     public static final double wristHoldSpeed = -.02;
 
+    public static final boolean liftEncoderInverted = true;
+    public static final boolean wristEncoderInverted = true;
+
 
     public static class liftPID {
       public static final double Pval = .001;
