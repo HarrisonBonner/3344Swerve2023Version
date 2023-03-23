@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.AbsoluteEncoder;
 
 import frc.robot.Constants;
@@ -24,9 +25,11 @@ public class RotatingArm extends SubsystemBase {
 
     public RotatingArm() {
         //Config controllers, encoder, and pid
+        m_Lift.restoreFactoryDefaults();
         m_Lift.setIdleMode(CANSparkMax.IdleMode.kCoast);
         m_LiftEncoder = m_Lift.getAbsoluteEncoder(Type.kDutyCycle);
         m_LiftEncoder.setInverted(Constants.RotatingArmConstants.liftEncoderInverted);
+        m_LiftEncoder.setPositionConversionFactor(360);
         m_LiftPID = m_Lift.getPIDController();
         m_LiftPID.setFeedbackDevice(m_LiftEncoder);
         m_LiftPID.setP(Constants.RotatingArmConstants.liftPID.Pval);
@@ -34,9 +37,11 @@ public class RotatingArm extends SubsystemBase {
         m_LiftPID.setD(Constants.RotatingArmConstants.liftPID.Dval);
         m_Lift.burnFlash();
 
-        m_Wrist.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        m_Wrist.restoreFactoryDefaults();
+        m_Wrist.setIdleMode(CANSparkMax.IdleMode.kBrake);
         m_WristEncoder = m_Wrist.getAbsoluteEncoder(Type.kDutyCycle);
-        m_LiftEncoder.setInverted(Constants.RotatingArmConstants.wristEncoderInverted);
+        m_WristEncoder.setInverted(Constants.RotatingArmConstants.wristEncoderInverted);
+        m_WristEncoder.setPositionConversionFactor(360);
         m_WristPID = m_Wrist.getPIDController();
         m_WristPID.setFeedbackDevice(m_WristEncoder);
         m_WristPID.setP(Constants.RotatingArmConstants.wristPID.Pval);
@@ -53,15 +58,23 @@ public class RotatingArm extends SubsystemBase {
 
     public CommandBase rotateLiftCommand(double speed) {
         //TODO check hold idea
-        //return this.startEnd(() -> m_Lift.set(speed), () -> m_LiftPID.setReference(m_LiftEncoder.getPosition(), CANSparkMax.ControlType.kPosition));
-        return this.startEnd(() ->  m_Lift.set(speed), () -> m_Lift.set(Constants.RotatingArmConstants.liftHoldSpeed));
+        return this.startEnd(() -> m_Lift.set(speed), () -> m_LiftPID.setReference(m_LiftEncoder.getPosition(), CANSparkMax.ControlType.kPosition));
+        //return this.startEnd(() ->  m_Lift.set(speed), () -> m_Lift.set(Constants.RotatingArmConstants.liftHoldSpeed));
 
     }
 
     public CommandBase rotateWristCommand(double speed){
         //TODO check hold idea
-        //return this.startEnd(() -> m_Wrist.set(speed), () -> m_WristPID.setReference(m_WristEncoder.getPosition(), CANSparkMax.ControlType.kPosition));
-        return this.startEnd(() -> m_Wrist.set(speed), () -> m_Wrist.set(Constants.RotatingArmConstants.wristHoldSpeed));
+        System.out.println("Lift " + m_LiftEncoder.getPosition());
+        System.out.println("Wrist " + m_WristEncoder.getPosition());
+
+        return this.startEnd(() -> m_Wrist.set(speed), () -> m_WristPID.setReference(m_WristEncoder.getPosition(), CANSparkMax.ControlType.kPosition));
+        //return this.startEnd(() -> m_Wrist.set(speed), () -> m_Wrist.set(Constants.RotatingArmConstants.wristHoldSpeed));
+    }
+
+    public CommandBase wristSetReference(){
+        final double pos = (m_WristEncoder.getPosition() < 5) ? 5 : m_WristEncoder.getPosition();
+        return this.runOnce(() -> m_WristPID.setReference(pos, CANSparkMax.ControlType.kPosition));
     }
 
     public void setArmPosition(double armAngle, double wristAngle){
@@ -70,16 +83,16 @@ public class RotatingArm extends SubsystemBase {
     }
     //TODO check wrist angles
     public CommandBase armTopGoal() {
-        return this.run( () -> setArmPosition(289, 254));
+        return this.runOnce( () -> setArmPosition(170, 123));
     }
     public CommandBase armMidGoal() {
-        return this.run( () -> setArmPosition(241, 214.5));
+        return this.runOnce( () -> setArmPosition(100, 61));
     }
     public CommandBase armLowGoal() {
-        return this.run( () -> setArmPosition(180, 219));
+        return this.runOnce( () -> setArmPosition(0, 87));
     }
     public CommandBase armFloor() {
-        return this.run( () -> setArmPosition(153, 230));
+        return this.runOnce( () -> setArmPosition(0, 87));
     }
 
 

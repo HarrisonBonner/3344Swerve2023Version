@@ -36,7 +36,7 @@ public final class Constants {
     public static final int wristMotorCanId = 19;
 
     public static final double liftMaxSpeed = .3;
-    public static final double liftHoldSpeed = .07;
+    public static final double liftHoldSpeed = .05;
     public static final double wristMaxSpeed = .3;
     public static final double wristHoldSpeed = -.025;
 
@@ -45,7 +45,7 @@ public final class Constants {
 
 
     public static class liftPID {
-      public static final double Pval = .0015;
+      public static final double Pval = .0050;
       public static final double Ival = 0;
       public static final double Dval = 0;
     }

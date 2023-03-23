@@ -86,7 +86,7 @@ public class RobotContainer {
                 // Rotate arm down
                 new JoystickButton(m_gunnerController, 1)
                                 .whileTrue(m_robotArm
-                                                .rotateLiftCommand(Constants.RotatingArmConstants.liftMaxSpeed * -1));
+                                                .rotateLiftCommand(Constants.RotatingArmConstants.liftMaxSpeed * -.5));
                 // Rotate Wrist up
                 new JoystickButton(m_gunnerController, 3)
                                 .whileTrue(m_robotArm.rotateWristCommand(Constants.RotatingArmConstants.wristMaxSpeed));
