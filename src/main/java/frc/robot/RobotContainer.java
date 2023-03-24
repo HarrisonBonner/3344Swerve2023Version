@@ -56,7 +56,7 @@ public class RobotContainer {
         public RobotContainer() {
                 // Configure the button bindings
                 configureButtonBindings();
-                configureDashboard();
+                //configureDashboard();
 
                 // Configure default commands
                 if (Constants.DriveConstants.driveRightJoystick) {
@@ -68,11 +68,11 @@ public class RobotContainer {
         }
 
         //Set up initial Shuffleboard boxes, not sure if neccesary
-        private void configureDashboard() {
-                SmartDashboard.putData("Wrist Encoder Position", null);
-                SmartDashboard.putData("Lift Encoder Position", null);
-                SmartDashboard.putData("Gyro", null);
-        }
+        // private void configureDashboard() {
+        //         SmartDashboard.putData("Wrist Encoder Position", null);
+        //         SmartDashboard.putData("Lift Encoder Position", null);
+        //         SmartDashboard.putData("Gyro", null);
+        // }
 
         /**
          * Use this method to define your button->command mappings. Buttons can be
