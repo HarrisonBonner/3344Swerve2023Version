@@ -29,6 +29,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.List;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.cameraserver.CameraServer;
 
 /*
@@ -66,6 +68,9 @@ public class RobotContainer {
                 } else {
                         m_robotDrive.setDefaultCommand(m_robotDrive.driveLeftJoystick());
                 }
+
+                RotatingArm.m_LiftPID.setReference(2, CANSparkMax.ControlType.kPosition);
+                RotatingArm.m_WristPID.setReference(2, CANSparkMax.ControlType.kPosition);
 
         }
 

@@ -73,7 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
     //TODO check gyro output
-    SmartDashboard.putData("Gyro", this.runOnce(() -> RobotContainer.m_gyro.getPitch()));
+    SmartDashboard.putNumber("Gyro", RobotContainer.m_gyro.getPitch());
   }
   
 

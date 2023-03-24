@@ -37,7 +37,7 @@ public final class Constants {
 
     public static final double liftMaxSpeed = .3;
     public static final double liftHoldSpeed = .05;
-    public static final double wristMaxSpeed = .3;
+    public static final double wristMaxSpeed = .2;
     public static final double wristHoldSpeed = -.025;
 
     public static final boolean liftEncoderInverted = false;
@@ -51,7 +51,7 @@ public final class Constants {
     }
 
     public static class wristPID {
-      public static final double Pval = .002;
+      public static final double Pval = .0025;
       public static final double Ival = 0;
       public static final double Dval = 0;
     }
@@ -59,11 +59,11 @@ public final class Constants {
 
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
-    public static final boolean driveRightJoystick = false;
+    public static final boolean driveRightJoystick = true;
     public static final boolean fieldRelative = false;
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 2;
-    public static final double kMaxAngularSpeed = Math.PI * 3; // radians per second
+    public static final double kMaxAngularSpeed = Math.PI * 2; // radians per second
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(23);
