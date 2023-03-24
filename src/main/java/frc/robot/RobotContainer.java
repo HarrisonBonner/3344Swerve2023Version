@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.List;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import edu.wpi.first.cameraserver.CameraServer;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -57,6 +58,7 @@ public class RobotContainer {
                 // Configure the button bindings
                 configureButtonBindings();
                 //configureDashboard();
+                CameraServer.startAutomaticCapture();
 
                 // Configure default commands
                 if (Constants.DriveConstants.driveRightJoystick) {
