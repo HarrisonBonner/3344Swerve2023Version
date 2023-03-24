@@ -6,9 +6,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.AbsoluteEncoder;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class RotatingArm extends SubsystemBase {
@@ -25,6 +24,7 @@ public class RotatingArm extends SubsystemBase {
 
     public RotatingArm() {
         //Config controllers, encoder, and pid
+        //TODO wrist and arm softlimits
         m_Lift.restoreFactoryDefaults();
         m_Lift.setIdleMode(CANSparkMax.IdleMode.kCoast);
         m_LiftEncoder = m_Lift.getAbsoluteEncoder(Type.kDutyCycle);
@@ -50,24 +50,28 @@ public class RotatingArm extends SubsystemBase {
         m_Wrist.burnFlash();
 
     }
-
+    //TODO check if updates values
     public void periodic() {
+        SmartDashboard.putData("Wrist ", getWristPosition());
+        SmartDashboard.putData("Lift Encoder Position", getLiftPosition());
     }
 
+    public CommandBase getWristPosition(){
+        return this.run(() -> m_WristEncoder.getPosition());
+    }
 
+    public CommandBase getLiftPosition(){
+        return this.run(() -> m_LiftEncoder.getPosition());
+    }
 
     public CommandBase rotateLiftCommand(double speed) {
-        //TODO check hold idea
         return this.startEnd(() -> m_Lift.set(speed), () -> m_LiftPID.setReference(m_LiftEncoder.getPosition(), CANSparkMax.ControlType.kPosition));
         //return this.startEnd(() ->  m_Lift.set(speed), () -> m_Lift.set(Constants.RotatingArmConstants.liftHoldSpeed));
 
     }
 
     public CommandBase rotateWristCommand(double speed){
-        //TODO check hold idea
-        System.out.println("Lift " + m_LiftEncoder.getPosition());
-        System.out.println("Wrist " + m_WristEncoder.getPosition());
-
+      
         return this.startEnd(() -> m_Wrist.set(speed), () -> m_WristPID.setReference(m_WristEncoder.getPosition(), CANSparkMax.ControlType.kPosition));
         //return this.startEnd(() -> m_Wrist.set(speed), () -> m_Wrist.set(Constants.RotatingArmConstants.wristHoldSpeed));
     }
@@ -81,6 +85,7 @@ public class RotatingArm extends SubsystemBase {
         m_LiftPID.setReference(armAngle, CANSparkMax.ControlType.kPosition);
         m_WristPID.setReference(wristAngle, CANSparkMax.ControlType.kPosition);
     }
+
     //TODO check wrist angles
     public CommandBase armTopGoal() {
         return this.runOnce( () -> setArmPosition(170, 123));

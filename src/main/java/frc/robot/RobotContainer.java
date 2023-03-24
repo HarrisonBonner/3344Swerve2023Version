@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.List;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
@@ -56,6 +56,7 @@ public class RobotContainer {
         public RobotContainer() {
                 // Configure the button bindings
                 configureButtonBindings();
+                configureDashboard();
 
                 // Configure default commands
                 if (Constants.DriveConstants.driveRightJoystick) {
@@ -64,6 +65,13 @@ public class RobotContainer {
                         m_robotDrive.setDefaultCommand(m_robotDrive.driveLeftJoystick());
                 }
 
+        }
+
+        //Set up initial Shuffleboard boxes, not sure if neccesary
+        private void configureDashboard() {
+                SmartDashboard.putData("Wrist Encoder Position", null);
+                SmartDashboard.putData("Lift Encoder Position", null);
+                SmartDashboard.putData("Gyro", null);
         }
 
         /**
