@@ -26,4 +26,16 @@ public class Intake extends SubsystemBase{
     public CommandBase outake(){
         return this.startEnd(() -> m_Intake.set(-1 * Constants.IntakeConstants.intakeMaxSpeed), () -> m_Intake.stopMotor());
     }
+
+    public CommandBase outakeConeCommand(){
+        return this.runOnce(() -> m_Intake.set(Constants.IntakeConstants.intakeMaxSpeed));
+    }
+
+    public CommandBase outakeCubeCommand(){
+        return this.runOnce(() -> m_Intake.set(-1 * Constants.IntakeConstants.intakeMaxSpeed));
+    } 
+
+    public CommandBase stopIntake(){
+        return this.runOnce(() -> m_Intake.stopMotor());
+    }
 }

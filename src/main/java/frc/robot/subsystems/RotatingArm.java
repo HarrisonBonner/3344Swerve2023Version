@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -92,18 +94,22 @@ public class RotatingArm extends SubsystemBase {
         m_WristPID.setReference(wristAngle, CANSparkMax.ControlType.kPosition);
     }
 
+    public Command setArmPositionCommand(double armAngle, double wristAngle){
+        return this.runOnce(() -> setArmPosition(armAngle, wristAngle));
+    }
+
     //TODO check wrist angles
     public CommandBase armTopGoal() {
-        return this.runOnce( () -> setArmPosition(170, 123));
+        return this.runOnce( () -> setArmPosition(200, 90));
     }
     public CommandBase armMidGoal() {
-        return this.runOnce( () -> setArmPosition(100, 61));
+        return this.runOnce( () -> setArmPosition(150, 70));
     }
     public CommandBase armLowGoal() {
-        return this.runOnce( () -> setArmPosition(0, 87));
+        return this.runOnce( () -> setArmPosition(30, 60));
     }
     public CommandBase armFloor() {
-        return this.runOnce( () -> setArmPosition(0, 87));
+        return this.runOnce( () -> setArmPosition(30, 60));
     }
 
 

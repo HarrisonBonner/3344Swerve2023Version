@@ -158,6 +158,7 @@ public class DriveSubsystem extends SubsystemBase {
                       -RobotContainer.m_driverController.getRawAxis(0),
                       0.1),
       Constants.DriveConstants.fieldRelative));
+      
   }
 
 
@@ -233,12 +234,13 @@ public class DriveSubsystem extends SubsystemBase {
 
     PIDController leveler = new PIDController(Constants.DriveConstants.autoLevelPID.kP, Constants.DriveConstants.autoLevelPID.kI, Constants.DriveConstants.autoLevelPID.kD);
     leveler.setSetpoint(0);
-    while(!leveler.atSetpoint()){
-      double correctionSpeed = leveler.calculate(RobotContainer.m_gyro.getAngle());
+    leveler.setTolerance(2);
+    while(RobotContainer.m_gyro.getPitch() > 4 || RobotContainer.m_gyro.getPitch() < -4) {
+      double correctionSpeed = leveler.calculate(RobotContainer.m_gyro.getPitch());
       correctionSpeed = Math.max(correctionSpeed, Constants.DriveConstants.autoLevelPID.max);
       correctionSpeed = Math.min(correctionSpeed, Constants.DriveConstants.autoLevelPID.min);
-      this.drive(0, correctionSpeed, 0, false);
-      Timer.delay(.005);
+      this.drive(correctionSpeed, 0, 0, false);
+      Timer.delay(.001);
     }
     this.setX();
     leveler.close();

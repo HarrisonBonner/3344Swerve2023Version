@@ -63,7 +63,7 @@ public final class Constants {
     public static final boolean fieldRelative = false;
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 2;
-    public static final double kMaxAngularSpeed = Math.PI * 2; // radians per second
+    public static final double kMaxAngularSpeed = Math.PI * 1.5; // radians per second
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(23);
@@ -96,12 +96,12 @@ public final class Constants {
     public static final boolean kGyroReversed = true; // TODO check with pigeon
 
     public static class autoLevelPID{
-      public static final double kP = 0.05;
+      public static final double kP = 0.003;
       public static final double kI = 0;
       public static final double kD = 0;
       public static final double kFF = 0;
-      public static final double max = .5;
-      public static final double min = -.5;
+      public static final double max = .11;
+      public static final double min = -.11;
 
     }
   }

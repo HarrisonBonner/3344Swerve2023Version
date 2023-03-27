@@ -51,7 +51,7 @@ public class RobotContainer {
         public final static Joystick m_gunnerController = new Joystick(1);
         public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
         public final static RotatingArm m_robotArm = new RotatingArm();
-        public final static Intake m_robotClaw = new Intake();
+        public final static Intake m_robotIntake = new Intake();
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -59,7 +59,7 @@ public class RobotContainer {
         public RobotContainer() {
                 // Configure the button bindings
                 configureButtonBindings();
-                //configureDashboard();
+                // configureDashboard();
                 CameraServer.startAutomaticCapture();
 
                 // Configure default commands
@@ -69,16 +69,16 @@ public class RobotContainer {
                         m_robotDrive.setDefaultCommand(m_robotDrive.driveLeftJoystick());
                 }
 
-                RotatingArm.m_LiftPID.setReference(2, CANSparkMax.ControlType.kPosition);
-                RotatingArm.m_WristPID.setReference(2, CANSparkMax.ControlType.kPosition);
+                //RotatingArm.m_LiftPID.setReference(5, CANSparkMax.ControlType.kPosition);
+                //RotatingArm.m_WristPID.setReference(2, CANSparkMax.ControlType.kPosition);
 
         }
 
-        //Set up initial Shuffleboard boxes, not sure if neccesary
+        // Set up initial Shuffleboard boxes, not sure if neccesary
         // private void configureDashboard() {
-        //         SmartDashboard.putData("Wrist Encoder Position", null);
-        //         SmartDashboard.putData("Lift Encoder Position", null);
-        //         SmartDashboard.putData("Gyro", null);
+        // SmartDashboard.putData("Wrist Encoder Position", null);
+        // SmartDashboard.putData("Lift Encoder Position", null);
+        // SmartDashboard.putData("Gyro", null);
         // }
 
         /**
@@ -111,10 +111,10 @@ public class RobotContainer {
                                                 .rotateWristCommand(-Constants.RotatingArmConstants.wristMaxSpeed));
                 // Intake on claw
                 new JoystickButton(m_gunnerController, 5)
-                                .whileTrue(m_robotClaw.outake());
+                                .whileTrue(m_robotIntake.outake());
                 // Outake on claw
                 new JoystickButton(m_gunnerController, 6)
-                                .whileTrue(m_robotClaw.intake());
+                                .whileTrue(m_robotIntake.intake());
                 /*
                  * top -> high goal
                  * left -> mid goal
@@ -155,6 +155,7 @@ public class RobotContainer {
                                 new Pose2d(3, 0, new Rotation2d(0)),
                                 config);
 
+
                 var thetaController = new ProfiledPIDController(
                                 AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
                 thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -177,4 +178,5 @@ public class RobotContainer {
                 // Run path following command, then stop at the end.
                 return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
         }
+
 }
