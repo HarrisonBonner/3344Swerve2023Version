@@ -28,6 +28,9 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private static final String kMoveAndScoreAuto = "Move and Score";
   private static final String kScoreAndLevelAuto = "Score and Level";
+  private static final String kScoreCube = "Score Cube Only";
+  private static final String kScoreCone = "Score Cone Only";
+
   private static String autoSelected;
 
   /**
@@ -45,6 +48,8 @@ public class Robot extends TimedRobot {
 
     m_chooser.addOption("Move and Score", kMoveAndScoreAuto);
     m_chooser.addOption("Score and Level", kScoreAndLevelAuto);
+    m_chooser.addOption("Score Cone Only", kScoreCone);
+    m_chooser.addOption("Score Cube Only", kScoreCone);
     SmartDashboard.putData("Auto choices", m_chooser);
 
   }
@@ -101,6 +106,12 @@ public class Robot extends TimedRobot {
         break;
       case kScoreAndLevelAuto:
         m_autonomousCommand = m_AutoCommands.moveAndScoreAndLevelAuto();
+        break;
+      case kScoreCone:
+        m_autonomousCommand = m_AutoCommands.justScoreCone();
+        break;
+      case kScoreCube:
+        m_autonomousCommand = m_AutoCommands.justScoreCube();
       default:
         // Put default auto code here
         m_autonomousCommand = null;

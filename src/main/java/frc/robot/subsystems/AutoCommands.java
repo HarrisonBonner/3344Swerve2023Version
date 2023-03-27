@@ -203,4 +203,24 @@ public class AutoCommands {
                 .andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false));
 
     }
+
+
+    public Command justScoreCube(){
+        return RobotContainer.m_robotArm.setArmPositionCommand(200, 92)
+                .andThen(new WaitCommand(1.5))
+                .andThen(RobotContainer.m_robotIntake.outakeCubeCommand())
+                .andThen(new WaitCommand(1))
+                .andThen(RobotContainer.m_robotIntake.stopIntake())
+                .andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false));
+    }
+
+    public Command justScoreCone(){
+        return RobotContainer.m_robotArm.setArmPositionCommand(200, 92)
+                .andThen(new WaitCommand(1.5))
+                .andThen(RobotContainer.m_robotIntake.outakeConeCommand())
+                .andThen(new WaitCommand(1))
+                .andThen(RobotContainer.m_robotIntake.stopIntake())
+                .andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false));
+    }
+
 }
