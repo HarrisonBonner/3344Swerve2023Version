@@ -12,6 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import frc.robot.Constants.DriveConstants;
@@ -59,6 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+
   }
 
   @Override
@@ -73,7 +76,10 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
     //TODO check gyro output
-    SmartDashboard.putNumber("Gyro", RobotContainer.m_gyro.getPitch());
+    SmartDashboard.putNumber("Pitch", RobotContainer.m_gyro.getPitch());
+
+ 
+
   }
   
 

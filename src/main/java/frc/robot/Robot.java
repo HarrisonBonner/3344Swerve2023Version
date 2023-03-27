@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.AutoCommands;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +25,10 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   private AutoCommands m_AutoCommands;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private static final String kMoveAndScoreAuto = "Move and Score";
+  private static final String kScoreAndLevelAuto = "Score and Level";
+  private static String autoSelected;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -36,6 +42,11 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_AutoCommands = new AutoCommands();
+
+    m_chooser.addOption("Move and Score", kMoveAndScoreAuto);
+    m_chooser.addOption("Score and Level", kScoreAndLevelAuto);
+    SmartDashboard.putData("Auto choices", m_chooser);
+
   }
 
   /**
@@ -75,11 +86,26 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    //m_autonomousCommand = m_AutoCommands.moveAndScoreAuto();
-    //m_autonomousCommand = m_AutoCommands.sCurve();
-    m_autonomousCommand = m_AutoCommands.moveAndScoreAndLevelAuto();
-    
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_autonomousCommand = m_AutoCommands.moveAndScoreAuto();
+    // m_autonomousCommand = m_AutoCommands.sCurve();
+    // m_autonomousCommand = m_AutoCommands.moveAndScoreAndLevelAuto();
+
+    //Choose auto from shuffleboard
+    autoSelected = m_chooser.getSelected();
+
+    switch (autoSelected) {
+      case kMoveAndScoreAuto:
+        // Put custom auto code here
+        m_autonomousCommand = m_AutoCommands.moveAndScoreAuto();
+        break;
+      case kScoreAndLevelAuto:
+        m_autonomousCommand = m_AutoCommands.moveAndScoreAndLevelAuto();
+      default:
+        // Put default auto code here
+        m_autonomousCommand = null;
+        break;
+    }
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",

@@ -14,9 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import java.util.List;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.RotatingArm;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.math.spline.Spline.ControlVector;
 
 public class AutoCommands {
 
