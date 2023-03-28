@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Score and Level", kScoreAndLevelAuto);
     m_chooser.addOption("Score Cone Only", kScoreCone);
     m_chooser.addOption("Score Cube Only", kScoreCone);
+    m_chooser.addOption("DO NOTHING AT ALL", "DO NOTHING AT ALL");
     SmartDashboard.putData("Auto choices", m_chooser);
 
   }

@@ -17,210 +17,193 @@ import frc.robot.RobotContainer;
 
 public class AutoCommands {
 
-    public AutoCommands() {
-    }
+        public AutoCommands() {}
 
-    public Command moveAndScoreAuto() {
-        TrajectoryConfig config = new TrajectoryConfig(
-                Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                // Add kinematics to ensure max speed is actually obeyed
-                .setKinematics(Constants.DriveConstants.kDriveKinematics);
+        /**
+         * auto that scores a cone then backs out to cross the mobility line
+         * 
+         * @return the command
+         */
+        public Command moveAndScoreAuto() {
+                TrajectoryConfig config = new TrajectoryConfig(
+                                Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                                // Add kinematics to ensure max speed is actually obeyed
+                                .setKinematics(Constants.DriveConstants.kDriveKinematics);
 
-        config.setReversed(true);
+                config.setReversed(true);
 
-        Trajectory firstMove = TrajectoryGenerator.generateTrajectory(new Pose2d(5, 0, new Rotation2d(0)),
-                List.of(new Translation2d(.5, 0)), new Pose2d(0, 0, new Rotation2d(0)), config);
+                Trajectory firstMove = TrajectoryGenerator.generateTrajectory(new Pose2d(5, 0, new Rotation2d(0)),
+                                List.of(new Translation2d(.5, 0)), new Pose2d(0, 0, new Rotation2d(0)), config);
 
-        // Trajectory finalMove = TrajectoryGenerator.generateTrajectory(List.of(new
-        // Pose2d(0, 0, new Rotation2d(0))),
-        // config);
+                // Trajectory finalMove = TrajectoryGenerator.generateTrajectory(List.of(new
+                // Pose2d(0, 0, new Rotation2d(0))),
+                // config);
 
-        var thetaController = new ProfiledPIDController(
-                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+                var thetaController = new ProfiledPIDController(
+                                Constants.AutoConstants.kPThetaController, 0, 0,
+                                Constants.AutoConstants.kThetaControllerConstraints);
+                thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand firstMoveSwerveControllerCommand = new SwerveControllerCommand(
-                firstMove,
-                RobotContainer.m_robotDrive::getPose, // Functional interface to feed supplier
-                Constants.DriveConstants.kDriveKinematics,
+                SwerveControllerCommand firstMoveSwerveControllerCommand = new SwerveControllerCommand(
+                                firstMove,
+                                RobotContainer.m_robotDrive::getPose, // Functional interface to feed supplier
+                                Constants.DriveConstants.kDriveKinematics,
 
-                // Position controllers
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                RobotContainer.m_robotDrive::setModuleStates,
-                RobotContainer.m_robotDrive);
+                                // Position controllers
+                                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                                thetaController,
+                                RobotContainer.m_robotDrive::setModuleStates,
+                                RobotContainer.m_robotDrive);
 
-        // SwerveControllerCommand finalMoveSwerveControllerCommand = new
-        // SwerveControllerCommand(
-        // finalMove,
-        // RobotContainer.m_robotDrive::getPose, // Functional interface to feed
-        // supplier
-        // Constants.DriveConstants.kDriveKinematics,
+                // SwerveControllerCommand finalMoveSwerveControllerCommand = new
+                // SwerveControllerCommand(
+                // finalMove,
+                // RobotContainer.m_robotDrive::getPose, // Functional interface to feed
+                // supplier
+                // Constants.DriveConstants.kDriveKinematics,
 
-        // // Position controllers
-        // new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-        // new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-        // thetaController,
-        // RobotContainer.m_robotDrive::setModuleStates,
-        // RobotContainer.m_robotDrive);
+                // // Position controllers
+                // new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                // new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                // thetaController,
+                // RobotContainer.m_robotDrive::setModuleStates,
+                // RobotContainer.m_robotDrive);
 
-        // Reset odometry to the starting pose of the trajectory.
-        RobotContainer.m_robotDrive.resetOdometry(firstMove.getInitialPose());
+                // Reset odometry to the starting pose of the trajectory.
+                RobotContainer.m_robotDrive.resetOdometry(firstMove.getInitialPose());
 
-        // Run path following command, then stop at the end.
-        return RobotContainer.m_robotArm.setArmPositionCommand(200, 92)
-                .andThen(new WaitCommand(1.5))
-                .andThen(RobotContainer.m_robotIntake.outakeConeCommand())
-                .andThen(new WaitCommand(1))
-                .andThen(RobotContainer.m_robotIntake.stopIntake())
-                // .andThen(RobotContainer.m_robotArm.setArmPositionCommand(20, 20))
-                .andThen(firstMoveSwerveControllerCommand)
-                .andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false))
-                .andThen(RobotContainer.m_robotArm.setArmPositionCommand(20, 20));
-    }
+                // Run path following command, then stop at the end.
+                return RobotContainer.m_robotArm.setArmPositionCommand(200, 92)
+                                .andThen(new WaitCommand(1.5))
+                                .andThen(RobotContainer.m_robotIntake.outakeConeCommand())
+                                .andThen(new WaitCommand(1))
+                                .andThen(RobotContainer.m_robotIntake.stopIntake())
+                                // .andThen(RobotContainer.m_robotArm.setArmPositionCommand(20, 20))
+                                .andThen(firstMoveSwerveControllerCommand)
+                                .andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false))
+                                .andThen(RobotContainer.m_robotArm.setArmPositionCommand(20, 20));
+        }
 
-    public Command sCurve() {
-        // Create config for trajectory
-        TrajectoryConfig config = new TrajectoryConfig(
-                Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                // Add kinematics to ensure max speed is actually obeyed
-                .setKinematics(Constants.DriveConstants.kDriveKinematics);
+        /**
+         * auto that scores a cone then backs on to platform and attempts to level
+         * 
+         * @return the command
+         */
 
-        // An example trajectory to follow. All units in meters.
-        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
-                new Pose2d(0, 0, new Rotation2d(0)),
-                // Pass through these two interior waypoints, making an 's' curve path
-                List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-                // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(3, 0, new Rotation2d(0)),
-                config);
+        public Command moveAndScoreAndLevelAuto() {
+                TrajectoryConfig config = new TrajectoryConfig(
+                                Constants.AutoConstants.kMaxSpeedMetersPerSecond / 2,
+                                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared / 2)
+                                // Add kinematics to ensure max speed is actually obeyed
+                                .setKinematics(Constants.DriveConstants.kDriveKinematics);
 
-        var thetaController = new ProfiledPIDController(
-                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+                config.setReversed(true);
 
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-                exampleTrajectory,
-                RobotContainer.m_robotDrive::getPose, // Functional interface to feed supplier
-                Constants.DriveConstants.kDriveKinematics,
+                Trajectory firstMove = TrajectoryGenerator.generateTrajectory(new Pose2d(5, 0, new Rotation2d(0)),
+                                List.of(new Translation2d(4.5, 0)), new Pose2d(4.2, 0, new Rotation2d(0)), config);
 
-                // Position controllers
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                RobotContainer.m_robotDrive::setModuleStates,
-                RobotContainer.m_robotDrive);
+                Trajectory secondMove = TrajectoryGenerator.generateTrajectory(new Pose2d(4, 0, new Rotation2d(0)),
+                                List.of(new Translation2d(3.7, 0)), new Pose2d(3.5, 0, new Rotation2d(0)), config);
+                // Trajectory finalMove = TrajectoryGenerator.generateTrajectory(List.of(new
+                // Pose2d(0, 0, new Rotation2d(0))),
+                // config);
 
-        // Reset odometry to the starting pose of the trajectory.
-        RobotContainer.m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+                // config.setReversed(false);
 
-        // Run path following command, then stop at the end.
-        return swerveControllerCommand.andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false));
-    }
+                // Trajectory thirdMove = TrajectoryGenerator.generateTrajectory(new Pose2d(0,
+                // 0, new Rotation2d(0)),
+                // List.of(new Translation2d(.5, 0)), new Pose2d(1.5, 0, new Rotation2d(0)),
+                // config);
 
-    public Command moveAndScoreAndLevelAuto() {
-        TrajectoryConfig config = new TrajectoryConfig(
-                Constants.AutoConstants.kMaxSpeedMetersPerSecond / 2,
-                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared / 2)
-                // Add kinematics to ensure max speed is actually obeyed
-                .setKinematics(Constants.DriveConstants.kDriveKinematics);
+                var thetaController = new ProfiledPIDController(
+                                Constants.AutoConstants.kPThetaController, 0, 0,
+                                Constants.AutoConstants.kThetaControllerConstraints);
+                thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        config.setReversed(true);
+                SwerveControllerCommand firstMoveSwerveControllerCommand = new SwerveControllerCommand(
+                                firstMove,
+                                RobotContainer.m_robotDrive::getPose, // Functional interface to feed supplier
+                                Constants.DriveConstants.kDriveKinematics,
 
-        Trajectory firstMove = TrajectoryGenerator.generateTrajectory(new Pose2d(5, 0, new Rotation2d(0)),
-                List.of(new Translation2d(4.5, 0)), new Pose2d(4.2, 0, new Rotation2d(0)), config);
+                                // Position controllers
+                                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                                thetaController,
+                                RobotContainer.m_robotDrive::setModuleStates,
+                                RobotContainer.m_robotDrive);
 
-        Trajectory secondMove = TrajectoryGenerator.generateTrajectory(new Pose2d(4, 0, new Rotation2d(0)),
-                List.of(new Translation2d(3.7, 0)), new Pose2d(3.5, 0, new Rotation2d(0)), config);
-        // Trajectory finalMove = TrajectoryGenerator.generateTrajectory(List.of(new
-        // Pose2d(0, 0, new Rotation2d(0))),
-        // config);
+                SwerveControllerCommand secondMoveSwerveControllerCommand = new SwerveControllerCommand(
+                                secondMove,
+                                RobotContainer.m_robotDrive::getPose, // Functional interface to feed supplier
+                                Constants.DriveConstants.kDriveKinematics,
 
-        // config.setReversed(false);
+                                // Position controllers
+                                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                                thetaController,
+                                RobotContainer.m_robotDrive::setModuleStates,
+                                RobotContainer.m_robotDrive);
 
-        // Trajectory thirdMove = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
-        //         List.of(new Translation2d(.5, 0)), new Pose2d(1.5, 0, new Rotation2d(0)), config);
+                // SwerveControllerCommand thirdMoveSwerveControllerCommand = new
+                // SwerveControllerCommand(
+                // thirdMove,
+                // RobotContainer.m_robotDrive::getPose, // Functional interface to feed
+                // supplier
+                // Constants.DriveConstants.kDriveKinematics,
 
-        var thetaController = new ProfiledPIDController(
-                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+                // // Position controllers
+                // new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                // new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                // thetaController,
+                // RobotContainer.m_robotDrive::setModuleStates,
+                // RobotContainer.m_robotDrive);
 
-        SwerveControllerCommand firstMoveSwerveControllerCommand = new SwerveControllerCommand(
-                firstMove,
-                RobotContainer.m_robotDrive::getPose, // Functional interface to feed supplier
-                Constants.DriveConstants.kDriveKinematics,
+                // Reset odometry to the starting pose of the trajectory.
+                RobotContainer.m_robotDrive.resetOdometry(firstMove.getInitialPose());
 
-                // Position controllers
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                RobotContainer.m_robotDrive::setModuleStates,
-                RobotContainer.m_robotDrive);
+                // Run path following command, then stop at the end.
+                return RobotContainer.m_robotArm.setArmPositionCommand(200, 92)
+                                .andThen(new WaitCommand(1.5))
+                                .andThen(RobotContainer.m_robotIntake.outakeCubeCommand())
+                                .andThen(new WaitCommand(1))
+                                .andThen(RobotContainer.m_robotIntake.stopIntake())
+                                .andThen(firstMoveSwerveControllerCommand)
+                                .andThen(RobotContainer.m_robotArm.setArmPositionCommand(20, 20))
+                                .andThen(secondMoveSwerveControllerCommand)
+                                // .andThen(thirdMoveSwerveControllerCommand)
+                                .andThen(RobotContainer.m_robotDrive.autoLevelCommand())
+                                .andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false));
 
-        SwerveControllerCommand secondMoveSwerveControllerCommand = new SwerveControllerCommand(
-                secondMove,
-                RobotContainer.m_robotDrive::getPose, // Functional interface to feed supplier
-                Constants.DriveConstants.kDriveKinematics,
+        }
 
-                // Position controllers
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                RobotContainer.m_robotDrive::setModuleStates,
-                RobotContainer.m_robotDrive);
+        /**
+         * auto that scores just a cube, does not move
+         * 
+         * @return the command
+         */
+        public Command justScoreCube() {
+                return RobotContainer.m_robotArm.setArmPositionCommand(200, 92)
+                                .andThen(new WaitCommand(1.5))
+                                .andThen(RobotContainer.m_robotIntake.outakeCubeCommand())
+                                .andThen(new WaitCommand(1))
+                                .andThen(RobotContainer.m_robotIntake.stopIntake())
+                                .andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false));
+        }
 
-        // SwerveControllerCommand thirdMoveSwerveControllerCommand = new SwerveControllerCommand(
-        //         thirdMove,
-        //         RobotContainer.m_robotDrive::getPose, // Functional interface to feed supplier
-        //         Constants.DriveConstants.kDriveKinematics,
-
-        //         // Position controllers
-        //         new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-        //         new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-        //         thetaController,
-        //         RobotContainer.m_robotDrive::setModuleStates,
-        //         RobotContainer.m_robotDrive);
-       
-
-        // Reset odometry to the starting pose of the trajectory.
-        RobotContainer.m_robotDrive.resetOdometry(firstMove.getInitialPose());
-
-        // Run path following command, then stop at the end.
-        return RobotContainer.m_robotArm.setArmPositionCommand(200, 92)
-                .andThen(new WaitCommand(1.5))
-                .andThen(RobotContainer.m_robotIntake.outakeCubeCommand())
-                .andThen(new WaitCommand(1))
-                .andThen(RobotContainer.m_robotIntake.stopIntake())
-                .andThen(firstMoveSwerveControllerCommand)
-                .andThen(RobotContainer.m_robotArm.setArmPositionCommand(20, 20))
-                .andThen(secondMoveSwerveControllerCommand)
-                //.andThen(thirdMoveSwerveControllerCommand)
-                .andThen(RobotContainer.m_robotDrive.autoLevelCommand())
-                .andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false));
-
-    }
-
-
-    public Command justScoreCube(){
-        return RobotContainer.m_robotArm.setArmPositionCommand(200, 92)
-                .andThen(new WaitCommand(1.5))
-                .andThen(RobotContainer.m_robotIntake.outakeCubeCommand())
-                .andThen(new WaitCommand(1))
-                .andThen(RobotContainer.m_robotIntake.stopIntake())
-                .andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false));
-    }
-
-    public Command justScoreCone(){
-        return RobotContainer.m_robotArm.setArmPositionCommand(200, 92)
-                .andThen(new WaitCommand(1.5))
-                .andThen(RobotContainer.m_robotIntake.outakeConeCommand())
-                .andThen(new WaitCommand(1))
-                .andThen(RobotContainer.m_robotIntake.stopIntake())
-                .andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false));
-    }
+        /**
+         * auto that scores just a cone, does not move
+         * 
+         * @return the command
+         */
+        public Command justScoreCone() {
+                return RobotContainer.m_robotArm.setArmPositionCommand(200, 92)
+                                .andThen(new WaitCommand(1.5))
+                                .andThen(RobotContainer.m_robotIntake.outakeConeCommand())
+                                .andThen(new WaitCommand(1))
+                                .andThen(RobotContainer.m_robotIntake.stopIntake())
+                                .andThen(() -> RobotContainer.m_robotDrive.drive(0, 0, 0, false));
+        }
 
 }
